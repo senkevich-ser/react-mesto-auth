@@ -1,3 +1,5 @@
+import React, { useEffect } from "react";
+
 function PopupWithForm({
   name,
   title,
@@ -7,6 +9,20 @@ function PopupWithForm({
   children,
   onSubmit,
 }) {
+  function popupCloseEsc(e) {
+    if (e.key === "Escape" || e.target.classList.contains("popup_opened")) {
+      onClose && onClose();
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener("keyup", popupCloseEsc);
+    document.addEventListener("click", popupCloseEsc);
+    return () => {
+      document.removeEventListener("keyup", popupCloseEsc);
+      document.removeEventListener("click", popupCloseEsc);
+    };
+  }, []);
   return (
     <section
       className={`popup popup_type_${name} ${isOpen ? "popup_opened" : ""}`}

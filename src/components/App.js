@@ -147,23 +147,31 @@ function App() {
           onCardDelete={handleCardDelete}
         />
         <Footer />
-        <EditProfilePopup
-          isOpen={isEditProfilePopupOpen}
-          onClose={closeAllPopups}
-          onUpdateUser={handleUpdateUser}
-        />
-        <AddPlacePopup
-          isOpen={isAddPlacePopupOpen}
-          onClose={closeAllPopups}
-          onAddPlace={handleAddPlaceSubmit}
-        />
-        <EditAvatarPopup
-          isOpen={isEditAvatarPopupOpen}
-          onClose={closeAllPopups}
-          onUpdateAvatar={handleUpdateAvatar}
-        />
+        {isEditProfilePopupOpen && (
+          <EditProfilePopup
+            isOpen={isEditProfilePopupOpen}
+            onClose={closeAllPopups}
+            onUpdateUser={handleUpdateUser}
+          />
+        )}
+        {isAddPlacePopupOpen && (
+          <AddPlacePopup
+            isOpen={isAddPlacePopupOpen}
+            onClose={closeAllPopups}
+            onAddPlace={handleAddPlaceSubmit}
+          />
+        )}
+        {isEditAvatarPopupOpen && (
+          <EditAvatarPopup
+            isOpen={isEditAvatarPopupOpen}
+            onClose={closeAllPopups}
+            onUpdateAvatar={handleUpdateAvatar}
+          />
+        )}
         <PopupWithForm title="Вы уверены?" name="remove" buttonTitle="Да" />
-        <ImagePopup card={selectedCard} onClose={closeAllPopups} />
+        {selectedCard.link && (
+          <ImagePopup card={selectedCard} onClose={closeAllPopups} />
+        )}
       </div>
     </CurrentUserContext.Provider>
   );

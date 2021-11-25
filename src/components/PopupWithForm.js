@@ -22,7 +22,7 @@ function PopupWithForm({
       document.removeEventListener("keyup", popupCloseEsc);
       document.removeEventListener("click", popupCloseEsc);
     };
-  }, []);
+  }, [isOpen, onClose]);
   return (
     <section
       className={`popup popup_type_${name} ${isOpen ? "popup_opened" : ""}`}

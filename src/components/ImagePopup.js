@@ -1,4 +1,14 @@
-function ImagePopup({ card, onClose }) {
+import React, { useEffect } from "react";
+
+function ImagePopup({ card, onClose, onCloseEscOverlay }) {
+  useEffect(() => {
+    document.addEventListener("keyup", onCloseEscOverlay);
+    document.addEventListener("click", onCloseEscOverlay);
+    return () => {
+      document.removeEventListener("keyup", onCloseEscOverlay);
+      document.removeEventListener("click", onCloseEscOverlay);
+    };
+  }, [card.link, onClose]);
   return (
     <div className={`foto-open popup ${card.link ? "popup_opened" : ""}`}>
       <div className="foto-open__container">

@@ -8,19 +8,14 @@ function PopupWithForm({
   buttonTitle,
   children,
   onSubmit,
+  onCloseEscOverlay,
 }) {
-  function popupCloseEsc(e) {
-    if (e.key === "Escape" || e.target.classList.contains("popup_opened")) {
-      onClose && onClose();
-    }
-  }
-
   useEffect(() => {
-    document.addEventListener("keyup", popupCloseEsc);
-    document.addEventListener("click", popupCloseEsc);
+    document.addEventListener("keyup", onCloseEscOverlay);
+    document.addEventListener("click", onCloseEscOverlay);
     return () => {
-      document.removeEventListener("keyup", popupCloseEsc);
-      document.removeEventListener("click", popupCloseEsc);
+      document.removeEventListener("keyup", onCloseEscOverlay);
+      document.removeEventListener("click", onCloseEscOverlay);
     };
   }, [isOpen, onClose]);
   return (

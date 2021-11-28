@@ -1,9 +1,12 @@
+import "../blocks/root/root.css";
 import React from "react";
 import Header from "./landing/Header.js";
 import Footer from "./landing/Footer.js";
 import Main from "./Main.js";
 import PopupWithForm from "./PopupWithForm.js";
 import ImagePopup from "./ImagePopup.js";
+import Login from "./Login.js";
+import Register from "./Register.js";
 import api from "../utils/Api.js";
 import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
 import EditProfilePopup from "./EditProfilePopup.js";
@@ -16,12 +19,15 @@ function App() {
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] =
     React.useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = React.useState(false);
+  const [isCardDeletePopupOpen, setIsCardDeletePopupOpen] =
+    React.useState(false);
   // переменная состояния, отвечающая за данные пользователя
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
 
   const [selectedCard, setSelectedCard] = React.useState({});
+  const [deleteCard, setDeleteCard] = React.useState({});
 
   React.useEffect(() => {
     api
@@ -61,12 +67,14 @@ function App() {
         console.log(err);
       });
   }
-  function handleCardDelete(card) {
+  function handleCardDelete(e) {
     // Отправляется запрос в API и получаю массив, без удалённойкарточки
+    e.preventDefault();
     api
-      .deleteCard(card._id)
+      .deleteCard(deleteCard._id)
       .then(() => {
-        setCards((state) => state.filter((c) => c._id !== card._id));
+        setCards((state) => state.filter((c) => c._id !== deleteCard._id));
+        closeAllPopups();
       })
       .catch((err) => {
         console.log(err);
@@ -85,6 +93,10 @@ function App() {
   function handleAddCardClick() {
     setAddPlacePopupOpen(true);
   }
+  function handleDeleteCardClick(card) {
+    setDeleteCard(card);
+    setIsCardDeletePopupOpen(true);
+  }
 
   function handleCardClick(card) {
     setSelectedCard(card);
@@ -94,6 +106,7 @@ function App() {
     setEditAvatarPopupOpen(false);
     setEditProfilePopupOpen(false);
     setAddPlacePopupOpen(false);
+    setIsCardDeletePopupOpen(false);
     setSelectedCard({});
   }
   function handleUpdateUser({ name, about }) {
@@ -131,24 +144,32 @@ function App() {
         console.log(err);
       });
   }
+  function popupCloseEscOverlay(e) {
+    if (e.key === "Escape" || e.target.classList.contains("popup_opened")) {
+      closeAllPopups();
+    }
+  }
   return isLoading ? (
     <Spinner />
   ) : (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
         <Header />
-        <Main
+        {/* <Main
           cards={cards}
           onEditProfile={handleEditProfileClick}
           onAddPlace={handleAddCardClick}
           onEditAvatar={handleEditAvatarClick}
           onCardClick={handleCardClick}
           onCardLike={handleCardLike}
-          onCardDelete={handleCardDelete}
-        />
+          onCardDelete={handleDeleteCardClick}
+        /> */}
+        <Login />
+        <Register />
         <Footer />
         {isEditProfilePopupOpen && (
           <EditProfilePopup
+            onCloseEscOverlay={popupCloseEscOverlay}
             isOpen={isEditProfilePopupOpen}
             onClose={closeAllPopups}
             onUpdateUser={handleUpdateUser}
@@ -156,6 +177,7 @@ function App() {
         )}
         {isAddPlacePopupOpen && (
           <AddPlacePopup
+            onCloseEscOverlay={popupCloseEscOverlay}
             isOpen={isAddPlacePopupOpen}
             onClose={closeAllPopups}
             onAddPlace={handleAddPlaceSubmit}
@@ -163,14 +185,29 @@ function App() {
         )}
         {isEditAvatarPopupOpen && (
           <EditAvatarPopup
+            onCloseEscOverlay={popupCloseEscOverlay}
             isOpen={isEditAvatarPopupOpen}
             onClose={closeAllPopups}
             onUpdateAvatar={handleUpdateAvatar}
           />
         )}
-        <PopupWithForm title="Вы уверены?" name="remove" buttonTitle="Да" />
+        {isCardDeletePopupOpen && (
+          <PopupWithForm
+            isOpen={isCardDeletePopupOpen}
+            onCloseEscOverlay={popupCloseEscOverlay}
+            title="Вы уверены?"
+            name="remove"
+            buttonTitle="Да"
+            onClose={closeAllPopups}
+            onSubmit={handleCardDelete}
+          />
+        )}
         {selectedCard.link && (
-          <ImagePopup card={selectedCard} onClose={closeAllPopups} />
+          <ImagePopup
+            onCloseEscOverlay={popupCloseEscOverlay}
+            card={selectedCard}
+            onClose={closeAllPopups}
+          />
         )}
       </div>
     </CurrentUserContext.Provider>

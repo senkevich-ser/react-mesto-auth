@@ -1,6 +1,6 @@
 import "../blocks/root/root.css";
 import React from "react";
-import Header from "./landing/Header.js";
+import { Route, Switch, Redirect } from "react-router-dom";
 import Footer from "./landing/Footer.js";
 import Main from "./Main.js";
 import PopupWithForm from "./PopupWithForm.js";
@@ -149,23 +149,35 @@ function App() {
       closeAllPopups();
     }
   }
+  const loggedIn = false;
   return isLoading ? (
     <Spinner />
   ) : (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
-        <Header />
-        {/* <Main
-          cards={cards}
-          onEditProfile={handleEditProfileClick}
-          onAddPlace={handleAddCardClick}
-          onEditAvatar={handleEditAvatarClick}
-          onCardClick={handleCardClick}
-          onCardLike={handleCardLike}
-          onCardDelete={handleDeleteCardClick}
-        /> */}
-        <Login />
-        <Register />
+        <Switch>
+          <Route path="/login">
+            <Login />
+          </Route>
+          <Route path="/register">
+            <Register />
+          </Route>
+          <Route path="/main">
+            <Main
+              cards={cards}
+              onEditProfile={handleEditProfileClick}
+              onAddPlace={handleAddCardClick}
+              onEditAvatar={handleEditAvatarClick}
+              onCardClick={handleCardClick}
+              onCardLike={handleCardLike}
+              onCardDelete={handleDeleteCardClick}
+            />
+          </Route>
+          <Route exact path="/">
+            {loggedIn ? <Redirect to="/main" /> : <Redirect to="/login" />}
+          </Route>
+        </Switch>
+
         <Footer />
         {isEditProfilePopupOpen && (
           <EditProfilePopup

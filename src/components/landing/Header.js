@@ -1,12 +1,11 @@
 import React from "react";
 import logo from "../../images/logo_russia.svg";
-import HeaderButton from "../HeaderButton";
 
-function Header() {
+function Header({ children }) {
   return (
     <header className="header wrapper">
       <img src={logo} alt="логотип" className="header__logo" />
-      <HeaderButton title="Войти" />
+      {children}
     </header>
   );
 }

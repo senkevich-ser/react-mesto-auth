@@ -47,7 +47,7 @@ function Register() {
           </button>
           <div className="register__question">
             Вы уже зарегистрированы?
-            <Link className="register__entryButton opacity" to="/login">
+            <Link className="register__entryButton opacity" to="/main">
               Войти
             </Link>
           </div>

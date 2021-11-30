@@ -10,7 +10,7 @@ function Login() {
   return (
     <>
       <Header>
-        <Link className="header__button opacity" to="/register">
+        <Link className="header__button opacity" to="/sign-up">
           Регистрация
         </Link>
       </Header>

@@ -18,7 +18,7 @@ function Main({
   return (
     <>
       <Header>
-        <Link className="header__button opacity" to="/login">
+        <Link className="header__button opacity" to="/sign-in">
           Выйти
         </Link>
       </Header>

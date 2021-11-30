@@ -7,6 +7,7 @@ import PopupWithForm from "./PopupWithForm.js";
 import ImagePopup from "./ImagePopup.js";
 import Login from "./Login.js";
 import Register from "./Register.js";
+import ProtectedRoute from "./ProtectedRoute";
 import api from "../utils/Api.js";
 import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
 import EditProfilePopup from "./EditProfilePopup.js";
@@ -156,25 +157,26 @@ function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
         <Switch>
-          <Route path="/login">
+          <Route path="/sign-in">
             <Login />
           </Route>
-          <Route path="/register">
+          <Route path="/sign-up">
             <Register />
           </Route>
-          <Route path="/main">
-            <Main
-              cards={cards}
-              onEditProfile={handleEditProfileClick}
-              onAddPlace={handleAddCardClick}
-              onEditAvatar={handleEditAvatarClick}
-              onCardClick={handleCardClick}
-              onCardLike={handleCardLike}
-              onCardDelete={handleDeleteCardClick}
-            />
-          </Route>
+          <ProtectedRoute
+            path="/main"
+            loggedIn={loggedIn}
+            component={Main}
+            cards={cards}
+            onEditProfile={handleEditProfileClick}
+            onAddPlace={handleAddCardClick}
+            onEditAvatar={handleEditAvatarClick}
+            onCardClick={handleCardClick}
+            onCardLike={handleCardLike}
+            onCardDelete={handleDeleteCardClick}
+          />
           <Route exact path="/">
-            {loggedIn ? <Redirect to="/main" /> : <Redirect to="/login" />}
+            {loggedIn ? <Redirect to="/main" /> : <Redirect to="/sign-in" />}
           </Route>
         </Switch>
 

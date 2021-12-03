@@ -1,6 +1,6 @@
 import "../blocks/root/root.css";
-import React from "react";
-import { Route, Switch, Redirect } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Route, Switch, Redirect, useHistory } from "react-router-dom";
 import Footer from "./landing/Footer.js";
 import Main from "./Main.js";
 import PopupWithForm from "./PopupWithForm.js";
@@ -16,21 +16,19 @@ import AddPlacePopup from "./AddPlacePopup.js";
 import { Spinner } from "./Spinner.js";
 
 function App() {
-  const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = React.useState(false);
-  const [isEditProfilePopupOpen, setEditProfilePopupOpen] =
-    React.useState(false);
-  const [isAddPlacePopupOpen, setAddPlacePopupOpen] = React.useState(false);
-  const [isCardDeletePopupOpen, setIsCardDeletePopupOpen] =
-    React.useState(false);
+  const history = useHistory();
+  const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
+  const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
+  const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
+  const [isCardDeletePopupOpen, setIsCardDeletePopupOpen] = useState(false);
   // переменная состояния, отвечающая за данные пользователя
-  const [currentUser, setCurrentUser] = React.useState({});
-  const [cards, setCards] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(false);
+  const [currentUser, setCurrentUser] = useState({});
+  const [cards, setCards] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedCard, setSelectedCard] = useState({});
+  const [deleteCard, setDeleteCard] = useState({});
 
-  const [selectedCard, setSelectedCard] = React.useState({});
-  const [deleteCard, setDeleteCard] = React.useState({});
-
-  React.useEffect(() => {
+  useEffect(() => {
     api
       .getInfoAboutUser()
       .then((currentUserData) => {
@@ -41,7 +39,7 @@ function App() {
       });
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setIsLoading(true);
     api
       .getCards()
@@ -158,10 +156,10 @@ function App() {
       <div className="App">
         <Switch>
           <Route path="/sign-in">
-            <Login />
+            <Login history={history} />
           </Route>
           <Route path="/sign-up">
-            <Register />
+            <Register history={history} />
           </Route>
           <ProtectedRoute
             path="/main"
@@ -174,6 +172,7 @@ function App() {
             onCardClick={handleCardClick}
             onCardLike={handleCardLike}
             onCardDelete={handleDeleteCardClick}
+            history={history}
           />
           <Route exact path="/">
             {loggedIn ? <Redirect to="/main" /> : <Redirect to="/sign-in" />}

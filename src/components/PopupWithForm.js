@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 function PopupWithForm({
   name,
@@ -10,17 +10,21 @@ function PopupWithForm({
   onSubmit,
   onCloseEscOverlay,
 }) {
+  const [onOpenTimeOut, setOnOpenTimeOut] = useState(false);
   useEffect(() => {
     document.addEventListener("keyup", onCloseEscOverlay);
     document.addEventListener("click", onCloseEscOverlay);
+    setTimeout(setOnOpenTimeOut(true), 800);
     return () => {
       document.removeEventListener("keyup", onCloseEscOverlay);
       document.removeEventListener("click", onCloseEscOverlay);
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, onCloseEscOverlay]);
   return (
     <section
-      className={`popup popup_type_${name} ${isOpen ? "popup_opened" : ""}`}
+      className={`popup popup_type_${name} ${
+        onOpenTimeOut ? "popup_opened" : ""
+      }`}
     >
       <div className="popup__container">
         <button

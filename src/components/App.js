@@ -150,7 +150,7 @@ function App() {
       closeAllPopups();
     }
   }
-  const loggedIn = false;
+  const loggedIn = true;
   return isLoading ? (
     <Spinner />
   ) : (

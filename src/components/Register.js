@@ -32,6 +32,7 @@ function Register() {
               name="password"
               placeholder="Пароль"
               className="input login__input-text"
+              autoComplete=""
               required
               minLength="2"
               maxLength="8"

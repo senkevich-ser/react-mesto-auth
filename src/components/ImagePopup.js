@@ -1,16 +1,18 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 function ImagePopup({ card, onClose, onCloseEscOverlay }) {
+  const [onOpenTimeOut, setOnOpenTimeOut] = useState(false);
   useEffect(() => {
     document.addEventListener("keyup", onCloseEscOverlay);
     document.addEventListener("click", onCloseEscOverlay);
+    setTimeout(setOnOpenTimeOut(true), 800);
     return () => {
       document.removeEventListener("keyup", onCloseEscOverlay);
       document.removeEventListener("click", onCloseEscOverlay);
     };
-  }, [card.link, onClose]);
+  }, [card.link, onClose, onCloseEscOverlay]);
   return (
-    <div className={`foto-open popup ${card.link ? "popup_opened" : ""}`}>
+    <div className={`foto-open popup ${onOpenTimeOut ? "popup_opened" : ""}`}>
       <div className="foto-open__container">
         <img
           className="foto-open__image"

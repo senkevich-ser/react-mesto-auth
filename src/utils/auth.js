@@ -6,8 +6,6 @@ export function handleResponse(res) {
 }
 
 export function register(email, password) {
-  console.log(email);
-  console.log(password);
   return fetch(`${BASE_URL}/signup`, {
     method: "POST",
     headers: {
@@ -18,7 +16,7 @@ export function register(email, password) {
   }).then((res) => handleResponse(res));
 }
 
-export function authorize(email, password) {
+/* export function authorize(email, password) {
   return fetch(`${BASE_URL}/signin`, {
     method: "POST",
     headers: {
@@ -38,4 +36,4 @@ export function checkToken(token) {
       Authorization: `Bearer ${token}`,
     },
   }).then((res) => handleResponse(res));
-}
+} */

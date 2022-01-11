@@ -2,50 +2,55 @@ import React, { useState } from "react";
 import "./Login.css";
 import Header from "./landing/Header.js";
 import InfoTooltip from "./InfoTooltip";
-import { Link, withRouter } from "react-router-dom";
+import { Link} from "react-router-dom";
 import * as auth from "../utils/auth";
 import succesImage from "../images/Union(black).jpg";
 import unSuccesImage from "../images/Union.jpg";
 
 function Register({ history }) {
   const [isInfoTooltipPopupOpen, setIsInfoTooltipPopupOpen] = useState(false);
-  const [resultMessage, setResultMessage] = useState({ image: null, text: "" });
+  const [resultMessage, setResultMessage] = useState({});
   const [inputValues, setInputValues] = useState({});
 
   function handleChange(e) {
-    const { name, value } = e.target;
-    setInputValues({ ...inputValues, [name]: value });
+    setInputValues({...inputValues,[e.target.name]: e.target.value });
   }
-  function handleSubmit(e, userEmail, userPassword, resetRegisterForm) {
-    e.preventDefault();
-    let messageText = "",
-      imageLink = null;
+  function infoToolTipClose() {
+    setIsInfoTooltipPopupOpen(false);
+  }
 
-    auth
-      .register(userEmail, userPassword)
+  function resetForm(){
+    setInputValues({});
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    if ( !inputValues.email || !inputValues.password ) {
+      return;
+    }
+    handleRegister();
+  
+  }
+
+  const handleRegister = () => {
+
+    auth.register(inputValues.email, inputValues.password)
       .then((res) => {
-        resetRegisterForm();
-        history.push("/signin");
-        messageText = "Вы успешно зарегистрировались!";
-        imageLink = succesImage;
+        resetForm();
+        setResultMessage({image : succesImage,text:"Вы успешно зарегистрировались!"});
+        setIsInfoTooltipPopupOpen(true);
+        setTimeout(()=>{history.push('/sign-in')},3000);
+        
       })
       .catch((err) => {
-        switch (err) {
-          case 400:
-            messageText = "Ошибка 400, некорректно заполнено одно из полей";
-            imageLink = unSuccesImage;
-            break;
-          default:
-            messageText = "Что-то пошло не так! Попробуйте ещё раз.";
-            imageLink = unSuccesImage;
-        }
-      })
-      .finally(() => {
-        setResultMessage({ image: imageLink, text: messageText });
-        console.log(messageText);
+        console.log(err)
+        setResultMessage({image : unSuccesImage,text:"Что-то пошло не так! Попробуйте ещё раз."});
         setIsInfoTooltipPopupOpen(true);
-      });
-  }
+        }
+          )
+      
+  };
+
   return (
     <>
       <Header>
@@ -53,13 +58,6 @@ function Register({ history }) {
           Войти
         </Link>
       </Header>
-      {isInfoTooltipPopupOpen && (
-        <InfoTooltip
-          onClose={setIsInfoTooltipPopupOpen(false)}
-          imageLink={resultMessage.image}
-          textMessage={resultMessage.text}
-        />
-      )}
       <div className="popup__login">
         <h2 className="login__title">Регистрация</h2>
         <form
@@ -109,8 +107,16 @@ function Register({ history }) {
           </div>
         </form>
       </div>
+      {isInfoTooltipPopupOpen && (
+        <InfoTooltip
+          onClose={infoToolTipClose}
+          imageLink={resultMessage.image}
+          textMessage={resultMessage.text}
+          onOpen ={isInfoTooltipPopupOpen}
+        />
+      )}
     </>
   );
 }
 
-export default withRouter(Register);
+export default Register;

@@ -47,6 +47,7 @@
 @import url("./blocks/foto-open/__name/foto-open__name.css");
 @import url("./blocks/popup/_opened/popup_opened.css");
 @import url("./blocks/popup/__submit-btn/_disabled/popup__submit-btn_disabled.css");
+@import url("./blocks/popup/__infoTooltip/popup__infoTooltip.css");
 @import url("./blocks/foto-grid/__urn/__urn_show/foto-grid__urn_show.css");
 @import url("./blocks/backgroundSpinner/backgroundSpinner.css");
 @import url("./blocks/backgroundSpinner/__spinner/backgroundSpinner__spinner.css");

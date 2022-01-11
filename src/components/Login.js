@@ -2,10 +2,9 @@ import React from "react";
 import "./Login.css";
 import Header from "./landing/Header.js";
 import { Link } from "react-router-dom";
-/* import { useRouteMatch } from "react-router-dom"; */
 
-function Login() {
-  /* const { path } = useRouteMatch(); */
+
+function Login({history}) {
 
   return (
     <>

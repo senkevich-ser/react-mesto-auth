@@ -148,7 +148,7 @@ function App() {
       closeAllPopups();
     }
   }
-  const loggedIn = true;
+  const loggedIn = false;
   return isLoading ? (
     <Spinner />
   ) : (
@@ -174,12 +174,12 @@ function App() {
             onCardDelete={handleDeleteCardClick}
             history={history}
           />
+          <Footer />
           <Route exact path="/">
             {loggedIn ? <Redirect to="/main" /> : <Redirect to="/sign-in" />}
           </Route>
         </Switch>
 
-        <Footer />
         {isEditProfilePopupOpen && (
           <EditProfilePopup
             onCloseEscOverlay={popupCloseEscOverlay}

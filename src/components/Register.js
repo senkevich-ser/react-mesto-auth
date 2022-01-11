@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "./Login.css";
 import Header from "./landing/Header.js";
 import InfoTooltip from "./InfoTooltip";
 import { Link} from "react-router-dom";
@@ -39,6 +38,7 @@ function Register({ history }) {
         resetForm();
         setResultMessage({image : succesImage,text:"Вы успешно зарегистрировались!"});
         setIsInfoTooltipPopupOpen(true);
+        localStorage.setItem('user', JSON.stringify(inputValues));
         setTimeout(()=>{history.push('/sign-in')},3000);
         
       })
@@ -58,7 +58,7 @@ function Register({ history }) {
           Войти
         </Link>
       </Header>
-      <div className="popup__login">
+      <div className="login__popup">
         <h2 className="login__title">Регистрация</h2>
         <form
           className="popup__inputs"
@@ -99,9 +99,9 @@ function Register({ history }) {
           >
             Зарегистрироваться
           </button>
-          <div className="register__question">
+          <div className="login__question">
             Вы уже зарегистрированы?
-            <Link className="register__entryButton opacity" to="/main">
+            <Link className="login__entryButton opacity" to="/main">
               Войти
             </Link>
           </div>

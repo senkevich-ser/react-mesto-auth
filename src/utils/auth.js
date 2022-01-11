@@ -16,7 +16,7 @@ export function register(email, password) {
   }).then((res) => handleResponse(res));
 }
 
-/* export function authorize(email, password) {
+export function authorize(email, password) {
   return fetch(`${BASE_URL}/signin`, {
     method: "POST",
     headers: {
@@ -36,4 +36,4 @@ export function checkToken(token) {
       Authorization: `Bearer ${token}`,
     },
   }).then((res) => handleResponse(res));
-} */
+}

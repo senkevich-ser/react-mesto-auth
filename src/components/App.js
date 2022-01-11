@@ -155,6 +155,9 @@ function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
         <Switch>
+        <Route exact path="/">
+            {loggedIn ? <Redirect to="/main" /> : <Redirect to="/sign-in" />}
+          </Route>
           <Route path="/sign-in">
             <Login history={history} />
           </Route>
@@ -175,9 +178,6 @@ function App() {
             history={history}
           />
           <Footer />
-          <Route exact path="/">
-            {loggedIn ? <Redirect to="/main" /> : <Redirect to="/sign-in" />}
-          </Route>
         </Switch>
 
         {isEditProfilePopupOpen && (

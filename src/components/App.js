@@ -27,6 +27,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCard, setSelectedCard] = useState({});
   const [deleteCard, setDeleteCard] = useState({});
+  const[loggedIn,setLoggedIn]=useState(false);
 
   useEffect(() => {
     api
@@ -148,7 +149,9 @@ function App() {
       closeAllPopups();
     }
   }
-  const loggedIn = false;
+  function handleLogin(){
+    setLoggedIn(true)
+} 
   return isLoading ? (
     <Spinner />
   ) : (
@@ -159,7 +162,7 @@ function App() {
             {loggedIn ? <Redirect to="/main" /> : <Redirect to="/sign-in" />}
           </Route>
           <Route path="/sign-in">
-            <Login history={history} />
+            <Login history={history} handleLogin={handleLogin}/>
           </Route>
           <Route path="/sign-up">
             <Register history={history} />

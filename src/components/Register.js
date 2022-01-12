@@ -27,12 +27,6 @@ function Register({ history }) {
     if ( !inputValues.email || !inputValues.password ) {
       return;
     }
-    handleRegister();
-  
-  }
-
-  const handleRegister = () => {
-
     auth.register(inputValues.email, inputValues.password)
       .then((res) => {
         resetForm();
@@ -48,8 +42,9 @@ function Register({ history }) {
         setIsInfoTooltipPopupOpen(true);
         }
           )
-      
-  };
+  
+  }
+
 
   return (
     <>

@@ -1,15 +1,49 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import Header from "./landing/Header.js";
 import { Link } from "react-router-dom";
+import * as auth from "../utils/auth";
+import unSuccesImage from "../images/Union.jpg";
+import InfoTooltip from "./InfoTooltip";
 
 
-function Login({history}) {
+function Login({ history,handleLogin}) {
   const userData = JSON.parse(localStorage.getItem('user'))
- const[inputValues,setInputValues] = useState(userData);
+  const [inputValues, setInputValues] = useState(userData);
+  const [isInfoTooltipPopupOpen, setIsInfoTooltipPopupOpen] = useState(false);
+  const [resultMessage, setResultMessage] = useState({});
 
- function handleChange(e) {
-  setInputValues({...inputValues,[e.target.name]: e.target.value });
-}
+  function handleChange(e) {
+    setInputValues({ ...inputValues, [e.target.name]: e.target.value });
+  }
+
+  function infoToolTipClose() {
+    setIsInfoTooltipPopupOpen(false);
+  }
+  function resetForm(){
+    setInputValues({});
+  }
+  function handleSubmit(e) {
+    e.preventDefault();
+    if ( !inputValues.email || !inputValues.password ) {
+      return;
+    }
+    auth.authorize(inputValues.email, inputValues.password)
+      .then((res) => {
+        resetForm();
+        handleLogin();
+        localStorage.setItem('token', JSON.stringify(res.token));
+        history.push('/main');
+        
+      })
+      .catch((err) => {
+        console.log(err)
+        setResultMessage({image : unSuccesImage,text:"Что-то пошло не так! Попробуйте ещё раз."});
+        setIsInfoTooltipPopupOpen(true);
+        }
+          )
+  
+  }
+
 
   return (
     <>
@@ -20,7 +54,9 @@ function Login({history}) {
       </Header>
       <div className="login__popup">
         <h2 className="login__title">Вход</h2>
-        <form className="popup__inputs" name="popupLogin">
+        <form className="popup__inputs" 
+        name="popupLogin" 
+        onSubmit={handleSubmit}>
           <fieldset className="popup__inputs">
             <input
               id="initial-input"
@@ -32,7 +68,7 @@ function Login({history}) {
               minLength="5"
               maxLength="40"
               onChange={handleChange}
-              value ={inputValues.email||''}
+              value={inputValues.email || ''}
             />
             <span className="initial-input-error popup__error"></span>
             <input
@@ -46,7 +82,7 @@ function Login({history}) {
               minLength="2"
               maxLength="8"
               onChange={handleChange}
-              value ={inputValues.password||''}
+              value={inputValues.password || ''}
             />
             <span className="rank-input-error popup__error"></span>
           </fieldset>
@@ -59,6 +95,14 @@ function Login({history}) {
           </button>
         </form>
       </div>
+      {isInfoTooltipPopupOpen && (
+        <InfoTooltip
+          onClose={infoToolTipClose}
+          imageLink={resultMessage.image}
+          textMessage={resultMessage.text}
+          onOpen ={isInfoTooltipPopupOpen}
+        />
+      )}
     </>
   );
 }

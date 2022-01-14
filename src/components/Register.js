@@ -49,9 +49,10 @@ function Register({ history }) {
   return (
     <>
       <Header>
-        <Link className="header__button opacity" to="/main">
+        <div><Link className="header__button opacity" to="/main">
           Войти
         </Link>
+        </div>
       </Header>
       <div className="login__popup">
         <h2 className="login__title">Регистрация</h2>

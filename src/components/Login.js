@@ -7,7 +7,7 @@ import InfoTooltip from "./InfoTooltip";
 
 
 function Login({ history,handleLogin}) {
-  const userData = JSON.parse(localStorage.getItem('user'))
+  const userData=JSON.parse(localStorage.getItem('user'))?JSON.parse(localStorage.getItem('user')):''
   const [inputValues, setInputValues] = useState(userData);
   const [isInfoTooltipPopupOpen, setIsInfoTooltipPopupOpen] = useState(false);
   const [resultMessage, setResultMessage] = useState({});
@@ -28,10 +28,10 @@ function Login({ history,handleLogin}) {
       return;
     }
     auth.authorize(inputValues.email, inputValues.password)
-      .then((res) => {
+      .then((data) => {
         resetForm();
         handleLogin();
-        localStorage.setItem('token', JSON.stringify(res.token));
+        localStorage.setItem('jwt', data.token);
         history.push('/main');
         
       })
@@ -48,9 +48,11 @@ function Login({ history,handleLogin}) {
   return (
     <>
       <Header>
+        <div>
         <Link className="header__button opacity" to="/sign-up">
           Регистрация
         </Link>
+        </div>
       </Header>
       <div className="login__popup">
         <h2 className="login__title">Вход</h2>

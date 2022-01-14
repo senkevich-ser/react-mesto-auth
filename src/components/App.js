@@ -14,6 +14,7 @@ import EditProfilePopup from "./EditProfilePopup.js";
 import EditAvatarPopup from "./EditAvatarPopup.js";
 import AddPlacePopup from "./AddPlacePopup.js";
 import { Spinner } from "./Spinner.js";
+import * as auth from "../utils/auth";
 
 function App() {
   const history = useHistory();
@@ -28,30 +29,21 @@ function App() {
   const [selectedCard, setSelectedCard] = useState({});
   const [deleteCard, setDeleteCard] = useState({});
   const[loggedIn,setLoggedIn]=useState(false);
-
-  useEffect(() => {
-    api
-      .getInfoAboutUser()
-      .then((currentUserData) => {
-        setCurrentUser(currentUserData);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+  const[userMail,setUserMail]=useState('')
 
   useEffect(() => {
     setIsLoading(true);
-    api
-      .getCards()
-      .then((cards) => {
+    Promise.all([api
+      .getInfoAboutUser(),api
+      .getCards()]).then(([currentUserData,cards])=>{
+        setCurrentUser(currentUserData); 
         setCards(cards);
         setIsLoading(false);
-      })
-      .catch((err) => {
-        console.log("Ошибка при получении данных профиля");
+      }).catch((err) => {
+        console.log(`Ошибка при получении данных профиля: ${err}`);
       });
   }, []);
+   
   function handleCardLike(card) {
     // Снова проверяем, есть ли уже лайк на этой карточке
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
@@ -152,6 +144,26 @@ function App() {
   function handleLogin(){
     setLoggedIn(true)
 } 
+useEffect(() => {
+  tokenCheck();
+}, [loggedIn,userMail,history]);
+
+function tokenCheck () {
+  const jwt = localStorage.getItem('jwt');
+if (jwt){  
+  auth.checkToken(jwt).then((res) => {
+    if (res){
+      setLoggedIn(true)
+      setUserMail(res.data.email)
+      history.push("/main")
+    }
+      }).catch((err)=>{
+        console.log(err)
+      });
+    }
+  }; 
+
+  
   return isLoading ? (
     <Spinner />
   ) : (
@@ -179,6 +191,7 @@ function App() {
             onCardLike={handleCardLike}
             onCardDelete={handleDeleteCardClick}
             history={history}
+            userMail={userMail}
           />
           <Footer />
         </Switch>

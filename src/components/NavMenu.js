@@ -1,13 +1,19 @@
 import React from "react";
-import {Link} from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 
-function NavMenu(){
+function NavMenu({userMail}){
+  const history = useHistory();
+  function signOut(){
+    console.log(localStorage.getItem('jwt'));
+    localStorage.removeItem('jwt');
+    localStorage.removeItem('user');
+    history.push('/sign-in');
+  }
+  
   return(
     <div className="header__menu">
-    <p className="header__button">e-mail</p>
-    <Link className="header__button opacity" to="/sign-in">
-          Выйти
-        </Link>
+    <p className="header__button">{userMail}</p>
+    <button onClick={signOut}className="header__button opacity">Выйти</button>
     </div>
   )
 }

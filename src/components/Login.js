@@ -14,6 +14,7 @@ function Login({ history,handleLogin}) {
 
   function handleChange(e) {
     setInputValues({ ...inputValues, [e.target.name]: e.target.value });
+    console.log(inputValues)
   }
 
   function infoToolTipClose() {
@@ -63,7 +64,7 @@ function Login({ history,handleLogin}) {
             <input
               id="initial-input"
               type="email"
-              name="e-mail"
+              name="email"
               placeholder="E-mail"
               className="input login__input-text"
               required

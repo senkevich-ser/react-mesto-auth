@@ -146,7 +146,7 @@ function App() {
 } 
 useEffect(() => {
   tokenCheck();
-}, [loggedIn,userMail,history]);
+}, [loggedIn]);
 
 function tokenCheck () {
   const jwt = localStorage.getItem('jwt');

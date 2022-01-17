@@ -4,7 +4,6 @@ import {useHistory} from 'react-router-dom';
 function NavMenu({userMail}){
   const history = useHistory();
   function signOut(){
-    console.log(localStorage.getItem('jwt'));
     localStorage.removeItem('jwt');
     localStorage.removeItem('user');
     history.push('/sign-in');

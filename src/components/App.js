@@ -16,6 +16,7 @@ import AddPlacePopup from "./AddPlacePopup.js";
 import { Spinner } from "./Spinner.js";
 import * as auth from "../utils/auth";
 import unSuccesImage from "../images/Union.jpg";
+import succesImage from "../images/Union(black).jpg";
 import InfoTooltip from "./InfoTooltip";
 
 function App() {
@@ -147,6 +148,24 @@ function App() {
       closeAllPopups();
     }
   }
+function handleRegister(email,password,resetForm,inputValues){
+  auth.register(email,password,)
+  .then((res) => {
+    resetForm();
+    setResultMessage({image : succesImage,text:"Вы успешно зарегистрировались!"});
+    setIsInfoTooltipPopupOpen(true);
+    localStorage.setItem('user', JSON.stringify(inputValues));
+    setTimeout(()=>{history.push('/sign-in')},3000);
+    
+  })
+  .catch((err) => {
+    console.log(err)
+    setResultMessage({image : unSuccesImage,text:"Что-то пошло не так! Попробуйте ещё раз."});
+    setIsInfoTooltipPopupOpen(true);
+    }
+      )
+}
+
   function handleLogin(email, password,resetForm) {
     auth.authorize(email, password,resetForm)
       .then((data) => {
@@ -195,10 +214,10 @@ function App() {
             {loggedIn ? <Redirect to="/main" /> : <Redirect to="/sign-in" />}
           </Route>
           <Route path="/sign-in">
-            <Login history={history} handleLogin={handleLogin} />
+            <Login handleLogin={handleLogin} />
           </Route>
           <Route path="/sign-up">
-            <Register history={history} />
+            <Register handleRegister={handleRegister} />
           </Route>
           <ProtectedRoute
             path="/main"

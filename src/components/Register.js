@@ -1,22 +1,16 @@
 import React, { useState } from "react";
 import Header from "./landing/Header.js";
-import InfoTooltip from "./InfoTooltip";
 import { Link} from "react-router-dom";
-import * as auth from "../utils/auth";
-import succesImage from "../images/Union(black).jpg";
-import unSuccesImage from "../images/Union.jpg";
 
-function Register({ history }) {
-  const [isInfoTooltipPopupOpen, setIsInfoTooltipPopupOpen] = useState(false);
-  const [resultMessage, setResultMessage] = useState({});
+
+function Register({handleRegister }) {
+  
   const [inputValues, setInputValues] = useState({});
 
   function handleChange(e) {
     setInputValues({...inputValues,[e.target.name]: e.target.value });
   }
-  function infoToolTipClose() {
-    setIsInfoTooltipPopupOpen(false);
-  }
+  
 
   function resetForm(){
     setInputValues({});
@@ -27,21 +21,7 @@ function Register({ history }) {
     if ( !inputValues.email || !inputValues.password ) {
       return;
     }
-    auth.register(inputValues.email, inputValues.password)
-      .then((res) => {
-        resetForm();
-        setResultMessage({image : succesImage,text:"Вы успешно зарегистрировались!"});
-        setIsInfoTooltipPopupOpen(true);
-        localStorage.setItem('user', JSON.stringify(inputValues));
-        setTimeout(()=>{history.push('/sign-in')},3000);
-        
-      })
-      .catch((err) => {
-        console.log(err)
-        setResultMessage({image : unSuccesImage,text:"Что-то пошло не так! Попробуйте ещё раз."});
-        setIsInfoTooltipPopupOpen(true);
-        }
-          )
+    handleRegister(inputValues.email, inputValues.password,resetForm,inputValues)
   
   }
 
@@ -103,14 +83,6 @@ function Register({ history }) {
           </div>
         </form>
       </div>
-      {isInfoTooltipPopupOpen && (
-        <InfoTooltip
-          onClose={infoToolTipClose}
-          imageLink={resultMessage.image}
-          textMessage={resultMessage.text}
-          onOpen ={isInfoTooltipPopupOpen}
-        />
-      )}
     </>
   );
 }

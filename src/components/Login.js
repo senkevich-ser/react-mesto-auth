@@ -1,25 +1,19 @@
 import React, { useState } from "react";
 import Header from "./landing/Header.js";
 import { Link } from "react-router-dom";
-import * as auth from "../utils/auth";
-import unSuccesImage from "../images/Union.jpg";
-import InfoTooltip from "./InfoTooltip";
 
 
-function Login({ history,handleLogin}) {
+
+function Login({handleLogin}) {
   const userData=JSON.parse(localStorage.getItem('user'))?JSON.parse(localStorage.getItem('user')):''
   const [inputValues, setInputValues] = useState(userData);
-  const [isInfoTooltipPopupOpen, setIsInfoTooltipPopupOpen] = useState(false);
-  const [resultMessage, setResultMessage] = useState({});
+  
 
   function handleChange(e) {
     setInputValues({ ...inputValues, [e.target.name]: e.target.value });
-    console.log(inputValues)
   }
 
-  function infoToolTipClose() {
-    setIsInfoTooltipPopupOpen(false);
-  }
+  
   function resetForm(){
     setInputValues({});
   }
@@ -28,20 +22,7 @@ function Login({ history,handleLogin}) {
     if ( !inputValues.email || !inputValues.password ) {
       return;
     }
-    auth.authorize(inputValues.email, inputValues.password)
-      .then((data) => {
-        resetForm();
-        handleLogin();
-        localStorage.setItem('jwt', data.token);
-        history.push('/main');
-        
-      })
-      .catch((err) => {
-        console.log(err)
-        setResultMessage({image : unSuccesImage,text:"Что-то пошло не так! Попробуйте ещё раз."});
-        setIsInfoTooltipPopupOpen(true);
-        }
-          )
+    handleLogin(inputValues.email,inputValues.password,resetForm);
   
   }
 
@@ -98,14 +79,6 @@ function Login({ history,handleLogin}) {
           </button>
         </form>
       </div>
-      {isInfoTooltipPopupOpen && (
-        <InfoTooltip
-          onClose={infoToolTipClose}
-          imageLink={resultMessage.image}
-          textMessage={resultMessage.text}
-          onOpen ={isInfoTooltipPopupOpen}
-        />
-      )}
     </>
   );
 }

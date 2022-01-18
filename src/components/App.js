@@ -15,6 +15,8 @@ import EditAvatarPopup from "./EditAvatarPopup.js";
 import AddPlacePopup from "./AddPlacePopup.js";
 import { Spinner } from "./Spinner.js";
 import * as auth from "../utils/auth";
+import unSuccesImage from "../images/Union.jpg";
+import InfoTooltip from "./InfoTooltip";
 
 function App() {
   const history = useHistory();
@@ -28,22 +30,24 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCard, setSelectedCard] = useState({});
   const [deleteCard, setDeleteCard] = useState({});
-  const[loggedIn,setLoggedIn]=useState(false);
-  const[userMail,setUserMail]=useState('')
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [userMail, setUserMail] = useState('')
+  const [isInfoTooltipPopupOpen, setIsInfoTooltipPopupOpen] = useState(false);
+  const [resultMessage, setResultMessage] = useState({});
 
   useEffect(() => {
     setIsLoading(true);
     Promise.all([api
-      .getInfoAboutUser(),api
-      .getCards()]).then(([currentUserData,cards])=>{
-        setCurrentUser(currentUserData); 
-        setCards(cards);
-        setIsLoading(false);
-      }).catch((err) => {
-        console.log(`Ошибка при получении данных профиля: ${err}`);
-      });
+      .getInfoAboutUser(), api
+        .getCards()]).then(([currentUserData, cards]) => {
+          setCurrentUser(currentUserData);
+          setCards(cards);
+          setIsLoading(false);
+        }).catch((err) => {
+          console.log(`Ошибка при получении данных профиля: ${err}`);
+        });
   }, []);
-   
+
   function handleCardLike(card) {
     // Снова проверяем, есть ли уже лайк на этой карточке
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
@@ -93,6 +97,9 @@ function App() {
   function handleCardClick(card) {
     setSelectedCard(card);
   }
+  function infoToolTipClose() {
+    setIsInfoTooltipPopupOpen(false);
+  }
   //функция закрытия попапов
   function closeAllPopups() {
     setEditAvatarPopupOpen(false);
@@ -124,12 +131,11 @@ function App() {
         console.log(err);
       });
   }
-  function handleAddPlaceSubmit({ name, link }, onSuccess) {
+  function handleAddPlaceSubmit({ name, link }) {
     api
       .addCard({ name, link })
       .then((newCard) => {
         setCards([newCard, ...cards]);
-        onSuccess();
         closeAllPopups();
       })
       .catch((err) => {
@@ -141,40 +147,55 @@ function App() {
       closeAllPopups();
     }
   }
-  function handleLogin(){
-    setLoggedIn(true)
-} 
-useEffect(() => {
-  tokenCheck();
-}, [loggedIn]);
+  function handleLogin(email, password,resetForm) {
+    auth.authorize(email, password,resetForm)
+      .then((data) => {
+        resetForm();
+        setLoggedIn(true)
+        localStorage.setItem('jwt', data.token);
+        history.push('/main');
 
-function tokenCheck () {
-  const jwt = localStorage.getItem('jwt');
-if (jwt){  
-  auth.checkToken(jwt).then((res) => {
-    if (res){
-      setLoggedIn(true)
-      setUserMail(res.data.email)
-      history.push("/main")
-    }
-      }).catch((err)=>{
+      })
+      .catch((err) => {
+        console.log(err)
+        setResultMessage({ image: unSuccesImage, text: "Что-то пошло не так! Попробуйте ещё раз." });
+        setIsInfoTooltipPopupOpen(true);
+      }
+      )
+  }
+
+
+  useEffect(() => {
+    tokenCheck();
+  }, [loggedIn]);
+
+  function tokenCheck() {
+    const jwt = localStorage.getItem('jwt');
+    if (jwt) {
+      auth.checkToken(jwt).then((res) => {
+        if (res) {
+          setLoggedIn(true)
+          setUserMail(res.data.email)
+          history.push("/main")
+        }
+      }).catch((err) => {
         console.log(err)
       });
     }
-  }; 
+  };
 
-  
+
   return isLoading ? (
     <Spinner />
   ) : (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
         <Switch>
-        <Route exact path="/">
+          <Route exact path="/">
             {loggedIn ? <Redirect to="/main" /> : <Redirect to="/sign-in" />}
           </Route>
           <Route path="/sign-in">
-            <Login history={history} handleLogin={handleLogin}/>
+            <Login history={history} handleLogin={handleLogin} />
           </Route>
           <Route path="/sign-up">
             <Register history={history} />
@@ -238,6 +259,14 @@ if (jwt){
             onClose={closeAllPopups}
           />
         )}
+        {isInfoTooltipPopupOpen && (
+        <InfoTooltip
+          onClose={infoToolTipClose}
+          imageLink={resultMessage.image}
+          textMessage={resultMessage.text}
+          onOpen ={isInfoTooltipPopupOpen}
+        />
+      )}
       </div>
     </CurrentUserContext.Provider>
   );

@@ -52,6 +52,8 @@ function Register({handleRegister }) {
               minLength="5"
               maxLength="40"
               onChange={handleChange}
+              value={inputValues.email || ''}
+              
             />
             <span className="initial-input-error popup__error"></span>
             <input
@@ -65,6 +67,7 @@ function Register({handleRegister }) {
               minLength="2"
               maxLength="8"
               onChange={handleChange}
+              value={inputValues.password || ''}
             />
             <span className="rank-input-error popup__error"></span>
           </fieldset>

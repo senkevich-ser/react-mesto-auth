@@ -1,5 +1,5 @@
 import "../blocks/root/root.css";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useCallback } from "react";
 import { Route, Switch, Redirect, useHistory } from "react-router-dom";
 import Footer from "./landing/Footer.js";
 import Main from "./Main.js";
@@ -183,12 +183,7 @@ function handleRegister(email,password,resetForm,inputValues){
       )
   }
 
-
-  useEffect(() => {
-    tokenCheck();
-  }, [loggedIn]);
-
-  function tokenCheck() {
+  const tokenCheck=useCallback(()=>{
     const jwt = localStorage.getItem('jwt');
     if (jwt) {
       auth.checkToken(jwt).then((res) => {
@@ -201,7 +196,11 @@ function handleRegister(email,password,resetForm,inputValues){
         console.log(err)
       });
     }
-  };
+  },[history]);
+  
+  useEffect(() => {
+    tokenCheck();
+  }, [loggedIn,tokenCheck]);
 
 
   return isLoading ? (

@@ -1,25 +1,25 @@
 {
   "files": {
     "main.css": "/react-mesto-auth/static/css/main.90502430.chunk.css",
-    "main.js": "/react-mesto-auth/static/js/main.c2476c02.chunk.js",
-    "main.js.map": "/react-mesto-auth/static/js/main.c2476c02.chunk.js.map",
+    "main.js": "/react-mesto-auth/static/js/main.239d74d0.chunk.js",
+    "main.js.map": "/react-mesto-auth/static/js/main.239d74d0.chunk.js.map",
     "runtime-main.js": "/react-mesto-auth/static/js/runtime-main.4089c352.js",
     "runtime-main.js.map": "/react-mesto-auth/static/js/runtime-main.4089c352.js.map",
-    "static/js/2.902bc457.chunk.js": "/react-mesto-auth/static/js/2.902bc457.chunk.js",
-    "static/js/2.902bc457.chunk.js.map": "/react-mesto-auth/static/js/2.902bc457.chunk.js.map",
+    "static/js/2.ae313d0b.chunk.js": "/react-mesto-auth/static/js/2.ae313d0b.chunk.js",
+    "static/js/2.ae313d0b.chunk.js.map": "/react-mesto-auth/static/js/2.ae313d0b.chunk.js.map",
     "static/js/3.f5ba592d.chunk.js": "/react-mesto-auth/static/js/3.f5ba592d.chunk.js",
     "static/js/3.f5ba592d.chunk.js.map": "/react-mesto-auth/static/js/3.f5ba592d.chunk.js.map",
     "index.html": "/react-mesto-auth/index.html",
     "static/css/main.90502430.chunk.css.map": "/react-mesto-auth/static/css/main.90502430.chunk.css.map",
-    "static/js/2.902bc457.chunk.js.LICENSE.txt": "/react-mesto-auth/static/js/2.902bc457.chunk.js.LICENSE.txt",
+    "static/js/2.ae313d0b.chunk.js.LICENSE.txt": "/react-mesto-auth/static/js/2.ae313d0b.chunk.js.LICENSE.txt",
     "static/media/index.css": "/react-mesto-auth/static/media/urn.2af49b82.svg",
     "static/media/Union.8d0172c8.jpg": "/react-mesto-auth/static/media/Union.8d0172c8.jpg",
     "static/media/logo_russia.bbe2a6ea.svg": "/react-mesto-auth/static/media/logo_russia.bbe2a6ea.svg"
   },
   "entrypoints": [
     "static/js/runtime-main.4089c352.js",
-    "static/js/2.902bc457.chunk.js",
+    "static/js/2.ae313d0b.chunk.js",
     "static/css/main.90502430.chunk.css",
-    "static/js/main.c2476c02.chunk.js"
+    "static/js/main.239d74d0.chunk.js"
   ]
 }
